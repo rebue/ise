@@ -5,9 +5,9 @@
 	<parent>
 		<groupId>com.github.rebue.common-pom</groupId>
 		<artifactId>sb-parent</artifactId>
-		<version>1.0.7</version>
+		<version>1.0.8</version>
 	</parent>
-	<groupId>com.github.rebue.ism</groupId>
+	<groupId>com.github.rebue.ise</groupId>
 	<artifactId>ise</artifactId>
 	<packaging>pom</packaging>
 	<description>信息共享与交换微服务</description>
