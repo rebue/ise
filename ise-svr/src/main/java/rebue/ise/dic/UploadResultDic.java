@@ -67,4 +67,9 @@ public enum UploadResultDic implements EnumBase {
         return code;
     }
 
+    @Override
+    public String getName() {
+        return name();
+    }
+
 }
