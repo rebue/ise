@@ -13,5 +13,16 @@
 	<description>信息共享与交换微服务</description>
 	<modules>
 		<module>ise-svr</module>
+		<module>ise-svr-feign</module>
 	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.github.rebue.ise</groupId>
+				<artifactId>ise-svr</artifactId>
+				<version>1.0.8</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
