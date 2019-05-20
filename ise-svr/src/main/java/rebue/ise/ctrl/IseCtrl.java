@@ -2,8 +2,10 @@ package rebue.ise.ctrl;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,8 +17,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +42,7 @@ public class IseCtrl {
 
 	/**
 	 * 上传文件
+	 * 
 	 * @param multipartFile
 	 * @param req
 	 * @return
@@ -67,7 +72,7 @@ public class IseCtrl {
 				String fileType = originfileName.substring(originfileName.lastIndexOf("."));
 				_log.info("文件类型为:{}", fileType);
 				// 新的文件名字
-				String newFileName = RandomEx.randomUUID() + fileType;
+				String newFileName = RandomEx.randomUUID();
 				_log.info("新文件名字为:{}", newFileName);
 				SimpleDateFormat sdf = new SimpleDateFormat("/yyyy/MM/dd/HH/mm/");// 设置日期格式
 				String path = sdf.format(new Date());
@@ -111,14 +116,28 @@ public class IseCtrl {
 	public SaveFileRo saveFile(@RequestBody SaveFileTo to) {
 		_log.info("保存文件的请求参数为：{}", to);
 		SaveFileRo ro = new SaveFileRo();
-		if (StringUtils.isAnyBlank(to.getContent(), to.getFileName(), to.getFileType())) {
+		if (StringUtils.isAnyBlank(to.getContent(), to.getFileType())) {
 			_log.error("保存文件出现参数错误，请求的参数为：{}", to);
 			ro.setResult(0);
 			ro.setMsg("参数错误");
 			return ro;
 		}
+
+		if (to.getOldFilePath() != null) {
+			String oldPath = rootPath + "/" + to.getOldFilePath();
+			File file = new File(oldPath);
+			if (file.exists()) {
+				_log.info("保存文件时发现有旧的文件，开始删除文件");
+				file.delete();
+			}
+		}
+
+		// 新的文件名字
+		String newFileName = RandomEx.randomUUID();
+		SimpleDateFormat sdf = new SimpleDateFormat("/yyyy/MM/dd/HH/mm/");// 设置日期格式
+		String path = sdf.format(new Date());
 		// 文件相对路径
-		String fileRelPath = "goodsDetail/" + to.getFileName() + "." + to.getFileType();
+		String fileRelPath = "goodsDetail" + path + newFileName + "." + to.getFileType();
 		// 文件绝对路径
 		String pathName = rootPath + "/" + fileRelPath;
 		_log.info("保存文件的文件路径和文件名称为：{}", pathName);
@@ -134,16 +153,10 @@ public class IseCtrl {
 			e.printStackTrace();
 		}
 
-		// 保存内容
-		String content = to.getContent();
 		try {
-			if (to.getFileType().equals("html")) {
-				content = "<!DOCTYPE html> <html><head><meta charset=\"UTF-8\"></head><body>" + to.getContent()
-						+ "</body></html>";
-			}
 			BufferedWriter bw = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(new File(pathName)), "utf-8"));
-			bw.write(new String(content));
+			bw.write(to.getContent());
 			bw.flush();
 			bw.close();
 
@@ -159,6 +172,37 @@ public class IseCtrl {
 			return ro;
 		} finally {
 			_log.info("\r\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 结束保存文件 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n");
+		}
+	}
+
+	/**
+	 * 按照字节读取文件内容
+	 * 
+	 * @return
+	 */
+	@GetMapping("/ise/read")
+	public String readFileByByte(@RequestParam("filePath") String filePath) {
+		_log.info("开始按字节读取文件，请求的参数为：{}", filePath);
+		String result = "";
+		File file = new File(rootPath + "/" + filePath);
+		InputStream is = null;
+		try {
+			is = new FileInputStream(file);
+
+			byte[] tempbytes = new byte[1024]; // 数组大小由文件决定
+			int tempByte; // 接收每一个读取进来的数据
+			while ((tempByte = is.read(tempbytes)) != -1) {
+				// 将字节转为字符
+				result += new String(tempbytes, 0, tempByte);
+			}
+
+			is.close();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return result;
+		} finally {
+			_log.info("根据字节读取文件的返回值为：{}", result);
 		}
 	}
 }

@@ -21,9 +21,9 @@ public class SaveFileTo {
 	private String content;
 
 	/**
-	 * 文件名称
+	 * 旧文件路径
 	 */
-	private String fileName;
+	private String oldFilePath;
 
 	/**
 	 * 文件类型
