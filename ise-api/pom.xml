@@ -7,17 +7,23 @@
 		<artifactId>ise</artifactId>
 		<version>1.0.8</version>
 	</parent>
-	<artifactId>ise-svr-feign</artifactId>
+	<artifactId>ise-api</artifactId>
 
 	<dependencies>
+		<!-- MyBatis的分页插件 -->
 		<dependency>
-			<groupId>com.github.rebue.ise</groupId>
-			<artifactId>ise-api</artifactId>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.rebue.sbs</groupId>
-			<artifactId>feign-spring-boot-starter</artifactId>
+			<groupId>com.github.rebue.wheel</groupId>
+			<artifactId>wheel-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.rebue.robotech</groupId>
+			<artifactId>robotech-api</artifactId>
 		</dependency>
 	</dependencies>
 </project>

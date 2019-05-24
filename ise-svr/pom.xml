@@ -8,8 +8,13 @@
 		<version>1.0.8</version>
 	</parent>
 	<artifactId>ise-svr</artifactId>
-	
+
 	<dependencies>
+		<dependency>
+			<groupId>com.github.rebue.ise</groupId>
+			<artifactId>ise-api</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>com.github.rebue.sbs</groupId>
 			<artifactId>smx-spring-boot-starter</artifactId>
