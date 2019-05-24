@@ -72,7 +72,7 @@ public class IseCtrl {
 				String fileType = originfileName.substring(originfileName.lastIndexOf("."));
 				_log.info("文件类型为:{}", fileType);
 				// 新的文件名字
-				String newFileName = RandomEx.randomUUID();
+				String newFileName = RandomEx.randomUUID() + "." + fileType;
 				_log.info("新文件名字为:{}", newFileName);
 				SimpleDateFormat sdf = new SimpleDateFormat("/yyyy/MM/dd/HH/mm/");// 设置日期格式
 				String path = sdf.format(new Date());
@@ -137,7 +137,7 @@ public class IseCtrl {
 		SimpleDateFormat sdf = new SimpleDateFormat("/yyyy/MM/dd/HH/mm/");// 设置日期格式
 		String path = sdf.format(new Date());
 		// 文件相对路径
-		String fileRelPath = "goodsDetail" + path + newFileName + "." + to.getFileType();
+		String fileRelPath = to.getModuleName() + path + newFileName + "." + to.getFileType();
 		// 文件绝对路径
 		String pathName = rootPath + "/" + fileRelPath;
 		_log.info("保存文件的文件路径和文件名称为：{}", pathName);

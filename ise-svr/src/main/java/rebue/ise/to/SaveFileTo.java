@@ -24,6 +24,11 @@ public class SaveFileTo {
 	 * 旧文件路径
 	 */
 	private String oldFilePath;
+	
+	/**
+	 * 模块名称
+	 */
+	private String moduleName;
 
 	/**
 	 * 文件类型
